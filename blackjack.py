@@ -36,12 +36,15 @@ d = Deck()
 player = Player("Hamilton")
 dealer = Player("Dealer")
 
+ace_value = 11
+
 #have both player and dealer draw 2 cards
 player.draw(d).draw(d)
 dealer.draw(d).draw(d)
 
 #calculate player's points
-def calcPoints(p, ace_value = 11):
+def calcPoints(p):
+    #reset points to zero
     pts = 0
     p.points = 0
     for c in p.hand:
@@ -53,6 +56,15 @@ def calcPoints(p, ace_value = 11):
             pts += ace_value
         else:
             print "invalid card value"
+    #if you go over 21 and you have aces in your hand that haven't been ignored yet, ignore an ace and recalculate the points
+    aces_in_hand = p.getNumOfCard(14)
+    if pts > 21 and aces_in_hand > 0:
+        ignored_ace_count = 1
+        while pts > 21 and ignored_ace_count <= aces_in_hand:
+            pts -= 10
+            ignored_ace_count += 1
+
+    #finally update the player's points
     p.points += pts
 
 def isGameOver(p, d):
@@ -61,7 +73,7 @@ def isGameOver(p, d):
     return False
 
 def getPlayerChoice():
-    player_choice = raw_input("hit or stand?")
+    player_choice = raw_input("hit or stand? ")
     if player_choice != "hit" and player_choice != "stand":
         print "Invalid input, try again"
         getPlayerChoice()
@@ -74,6 +86,7 @@ calcPoints(player)
 calcPoints(dealer)
 
 playerStand = False
+dealerStand = False
 
 #run this loop until
 while not isGameOver(player, dealer):
@@ -87,16 +100,26 @@ while not isGameOver(player, dealer):
     #first we get their choice
     if not playerStand:
         if getPlayerChoice() == "hit":
+            print "YOU DRAW A CARD"
             player.draw(d)
         else:
             playerStand = True
 
     #dealer always draws... for now
-    dealer.draw(d)
+    if dealer.points < 17:
+        print "DEALER DRAWS A CARD"
+        dealer.draw(d)
+    else:
+        print "DEALER DOESN'T DRAW ANYMORE"
+        dealerStand = True
 
     #recalculate points for both dealer and player every loop
     calcPoints(player)
     calcPoints(dealer)
+
+    #end the game if neither the player nor the dealer are willing to draw cards
+    if dealerStand and playerStand:
+        break
 
 #after the game ends
 print "*****GAME OVER*****"

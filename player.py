@@ -33,3 +33,11 @@ class Player(object):
     #add point(s), 1 point by default
     def addPts(self, pts=1):
         self.points += pts
+
+    #returns number of card X in the hand
+    def getNumOfCard(self, card_val):
+        count = 0
+        for c in self.hand:
+            if c.value == card_val:
+                count += 1
+        return count
