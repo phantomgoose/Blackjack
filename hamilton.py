@@ -6,8 +6,6 @@ d = Deck()
 p1 = Player("Hamilton")
 p2 = Player("Burr")
 
-#test
-
 #while there are cards remaining in the deck
 while (len(d.cards) > 0):
     #both players draw
