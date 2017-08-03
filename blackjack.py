@@ -80,6 +80,11 @@ def getPlayerChoice():
     else:
         return player_choice
 
+def showGameState():
+    print "You have " + str(player.points) + " points. Your hand consists of: "
+    print player.showHand()
+    print "Dealer has " + str(dealer.points) + " points. Their hand consists of: "
+    print dealer.showHand()
 
 #calculate starting points for both player and dealer
 calcPoints(player)
@@ -127,19 +132,10 @@ print "*****GAME OVER*****"
 if player.points > 21 and dealer.points > 21:
     #REFACTOR THIS MESS
     print "NOBODY WINS!"
-    print "You have " + str(player.points) + " points. Your hand consists of: "
-    print player.showHand()
-    print "Dealer has " + str(dealer.points) + " points. Their hand consists of: "
-    print dealer.showHand()
+    showGameState()
 elif (player.points > dealer.points or dealer.points > 21) and player.points <= 21:
     print "YOU WIN!"
-    print "You have " + str(player.points) + " points. Your hand consists of: "
-    print player.showHand()
-    print "Dealer has " + str(dealer.points) + " points. Their hand consists of: "
-    print dealer.showHand()
+    showGameState()
 else:
     print "YOU LOSE!"
-    print "You have " + str(player.points) + " points. Your hand consists of: "
-    print player.showHand()
-    print "Dealer has " + str(dealer.points) + " points. Their hand consists of: "
-    print dealer.showHand()
+    showGameState()
