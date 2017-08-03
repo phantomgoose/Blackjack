@@ -7,7 +7,8 @@ class Deck(object):
 
     def create(self):
         for x in ['Hearts','Diamonds','Spades','Clubs']:
-            for y in range(1,14):
+            #generates cards from 2 to 14 (14 being Ace)
+            for y in range(2,15):
                 self.cards.append(Card(x,y))
 
     def show(self):
