@@ -39,6 +39,7 @@ while (len(d.cards) > 0):
 #announce the winner
 if p1.points > p2.points:
     print "Game over. " + p1.name + " wins with " + str(p1.points) + " points! " + p2.name + " had " + str(p2.points) + " points."
+    print "....... A few days later Hamilton died from his wounds :("
 elif p1.points < p2.points:
     print "Game over. " + p2.name + " wins with " + str(p2.points) + " points! " + p1.name + " had " + str(p1.points) + " points."
 elif p1.points == p2.points:
