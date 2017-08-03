@@ -11,8 +11,10 @@ class Player(object):
 
     #prints the value of each card in the hand
     def showHand(self):
+        res = []
         for card in self.hand:
-            card.show()
+            res.append(card.show())
+        return res
 
     #returns x cards from the hand, default all
     def getHand(self, num=None):
