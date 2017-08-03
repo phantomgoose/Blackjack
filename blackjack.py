@@ -56,7 +56,7 @@ def calcPoints(p, ace_value = 11):
     p.points += pts
 
 def isGameOver(p, d):
-    if (p.points >= 21 and d.points >= 21):
+    if (p.points >= 21 or d.points >= 21):
         return True
     return False
 
