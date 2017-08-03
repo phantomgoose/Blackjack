@@ -33,5 +33,25 @@ from player import Player
 
 #generate game objects
 d = Deck()
-player = Player("Hamilton"))
+player = Player("Hamilton")
 dealer = Player("Dealer")
+
+#have both player and dealer draw 2 cards
+player.draw(d).draw(d)
+dealer.draw(d).draw(d)
+
+#calculate player's points
+def calcPoints(p):
+    pts = 0
+    for c in p.hand:
+        if c.value < 10:
+            pts += c.value
+        elif c.value >= 10:
+            pts += 10
+        else:
+            print "invalid card value"
+    p.points += pts
+calcPoints(player)
+calcPoints(dealer)
+print player.points
+print dealer.points
