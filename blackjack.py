@@ -73,7 +73,8 @@ def isGameOver(p, d):
     return False
 
 def getPlayerChoice():
-    player_choice = raw_input("hit or stand? ")
+    print "****************************************************************************************"
+    player_choice = raw_input("HIT OR STAND? ")
     if player_choice != "hit" and player_choice != "stand":
         print "Invalid input, try again"
         getPlayerChoice()
@@ -81,10 +82,8 @@ def getPlayerChoice():
         return player_choice
 
 def showGameState():
-    print "You have " + str(player.points) + " points. Your hand consists of: "
-    print player.showHand()
-    print "Dealer has " + str(dealer.points) + " points. Their hand consists of: "
-    print dealer.showHand()
+    print "You have " + str(player.points) + " points. Your hand consists of: ", player.showHand()
+    print "Dealer has " + str(dealer.points) + " points. Their hand consists of: ", dealer.showHand()
 
 #calculate starting points for both player and dealer
 calcPoints(player)
@@ -98,8 +97,7 @@ while not isGameOver(player, dealer):
 
     #print game state information
     print "Dealer's first card: " + dealer.getHand()[0].show()
-    print "You have " + str(player.points) + " points. Your hand consists of: "
-    print player.showHand()
+    print "YOU HAVE " + str(player.points).upper() + " POINTS. Your hand consists of: ", player.showHand()
 
     #player goes first
     #first we get their choice
@@ -127,7 +125,7 @@ while not isGameOver(player, dealer):
         break
 
 #after the game ends
-print "*****GAME OVER*****"
+print "***************GAME OVER***************"
 
 if player.points > 21 and dealer.points > 21:
     #REFACTOR THIS MESS
