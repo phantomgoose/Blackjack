@@ -5,7 +5,7 @@ class Card(object):
 
     #prints the card value to console
     def show(self):
-        print '{} of {}'.format(self.valToName(self.value), self.suit)
+        return '{} of {}'.format(self.valToName(self.value), self.suit)
 
     #converts card's value (1-14) to its name (2 -> Ace)
     def valToName(self, val):
