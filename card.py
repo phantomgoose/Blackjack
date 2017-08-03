@@ -3,6 +3,7 @@ class Card(object):
         self.suit = suit
         self.value = value
 
+    #prints the card value to console
     def show(self):
         print '{} of {}'.format(self.valToName(self.value), self.suit)
 
@@ -25,6 +26,7 @@ class Card(object):
         }
         return conversionDict[val]
 
+#test cases
 if __name__ == "__main__":
     c = Card("Clubs", 11)
     b = Card("Diamonds", 10)
