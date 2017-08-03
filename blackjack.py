@@ -75,10 +75,8 @@ calcPoints(dealer)
 
 playerStand = False
 
-test_count = 10
-
 #run this loop until
-while not isGameOver(player, dealer) and test_count > 0:
+while not isGameOver(player, dealer):
 
     #print game state information
     print "Dealer's first card: " + dealer.getHand()[0].show()
@@ -99,8 +97,6 @@ while not isGameOver(player, dealer) and test_count > 0:
     #recalculate points for both dealer and player every loop
     calcPoints(player)
     calcPoints(dealer)
-
-    test_count -= 1
 
 #after the game ends
 print "*****GAME OVER*****"
