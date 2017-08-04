@@ -89,11 +89,53 @@ def showGameState():
 calcPoints(player)
 calcPoints(dealer)
 
+global playerStand
 playerStand = False
+global dealerStand
 dealerStand = False
+global gameOver
+gameOver = False
 
-#run this loop until
-while not isGameOver(player, dealer):
+'''
+functions for server comm
+'''
+
+def getDealerCard():
+    return dealer.getHand()[0].show()
+
+def getPlayerCards():
+    return player.showHand()
+
+def getPlayerPoints():
+    return player.points
+
+def getDealerCards():
+    return dealer.showHand()
+
+def getDealerPoints():
+    return dealer.points
+
+def setPlayerChoice(choice):
+    if not playerStand:
+        if choice == "hit":
+            print "YOU DRAW A CARD"
+            player.draw(d)
+        else:
+            playerStand = True
+
+def getGameState():
+    print gameOver
+    if gameOver != True:
+        return "Game is not over yet, still playing. You have " + str(getPlayerPoints()) + " points."
+    else:
+        if player.points > 21 and dealer.points > 21:
+            return "Nobody wins! Dealer's hand:", getDealerCards(), "dealer points", str(getDealerPoints()) + " Your points: " + str(getPlayerPoints())
+        elif (player.points > dealer.points or dealer.points > 21) and player.points <= 21:
+            return "YOU WIN! Dealer's hand:", getDealerCards(), "dealer points", str(getDealerPoints()) + " Your points: " + str(getPlayerPoints())
+        else:
+            return "YOU LOSE! Dealer's hand:", getDealerCards(), "dealer points", str(getDealerPoints()) + " Your points: " + str(getPlayerPoints())
+
+def play(choice):
 
     #print game state information
     print "Dealer's first card: " + dealer.getHand()[0].show()
@@ -102,18 +144,20 @@ while not isGameOver(player, dealer):
     #player goes first
     #first we get their choice
     if not playerStand:
-        if getPlayerChoice() == "hit":
+        if choice == "hit":
             print "YOU DRAW A CARD"
             player.draw(d)
         else:
+            global playerStand
             playerStand = True
 
-    #dealer always draws... for now
+    #dealer always draws until they have at least 17 points
     if dealer.points < 17:
         print "DEALER DRAWS A CARD"
         dealer.draw(d)
     else:
         print "DEALER DOESN'T DRAW ANYMORE"
+        global dealerStand
         dealerStand = True
 
     #recalculate points for both dealer and player every loop
@@ -121,19 +165,24 @@ while not isGameOver(player, dealer):
     calcPoints(dealer)
 
     #end the game if neither the player nor the dealer are willing to draw cards
-    if dealerStand and playerStand:
-        break
+    if (dealerStand and playerStand) or isGameOver(player, dealer):
+        global gameOver
+        gameOver = True
+        print "Game over"
+        print getDealerCards()
+        print getDealerPoints()
+'''
+    #after the game ends
+    print "***************GAME OVER***************"
 
-#after the game ends
-print "***************GAME OVER***************"
-
-if player.points > 21 and dealer.points > 21:
-    #REFACTOR THIS MESS
-    print "NOBODY WINS!"
-    showGameState()
-elif (player.points > dealer.points or dealer.points > 21) and player.points <= 21:
-    print "YOU WIN!"
-    showGameState()
-else:
-    print "YOU LOSE!"
-    showGameState()
+    if player.points > 21 and dealer.points > 21:
+        #REFACTOR THIS MESS
+        print "NOBODY WINS!"
+        showGameState()
+    elif (player.points > dealer.points or dealer.points > 21) and player.points <= 21:
+        print "YOU WIN!"
+        showGameState()
+    else:
+        print "YOU LOSE!"
+        showGameState()
+'''

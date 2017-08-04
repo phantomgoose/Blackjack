@@ -1,0 +1,13 @@
+.wrapper {
+  width: 1000px;
+  background: lightgrey;
+  padding: 5px
+}
+input {
+  border: thin solid black;
+  border-radius: 2px;
+  color: white;
+  background: orange;
+  padding: 5px 20px;
+  margin-right: 10px;
+}
