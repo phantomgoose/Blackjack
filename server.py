@@ -12,7 +12,16 @@ def root():
     else:
         skip_state = ""
         hit_stand_state = "hidden"
-    return render_template("index.html", dealer_card=blackjack.getDealerCard(), player_cards=blackjack.getPlayerCards(), output=blackjack.getGameState(), skip_state=skip_state, hit_stand_state=hit_stand_state)
+    return render_template("index.html", dealer_card=cardToImg(blackjack.getDealerCard()), player_cards=cardsToImg(blackjack.getPlayerCards()), output=blackjack.getGameState(), skip_state=skip_state, hit_stand_state=hit_stand_state)
+
+def cardToImg(card):
+    return "<img src='static/svg/" + card.getShortValue() + card.getShortSuit() + ".svg'>"
+
+def cardsToImg(cards):
+    res = ""
+    for card in cards:
+        res += cardToImg(card)
+    return res
 
 @app.route("/decide", methods=["POST"])
 

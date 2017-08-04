@@ -7,8 +7,10 @@
 </head>
 <body>
   <div class="wrapper">
-    <p>Dealer card: {{ dealer_card }}</p>
-    <p>Your cards: {{ player_cards }}</p>
+    <h1>Dealer card:</h1>
+    {{ dealer_card | safe }}
+    <h1>Your cards:</h1>
+    {{ player_cards | safe }}
     <p>{{ output }}</p>
     <form class="player_decision" action="/decide" method="post">
       <input type="submit" name="choice" value="hit" {{ hit_stand_state }}>

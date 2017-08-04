@@ -64,10 +64,10 @@ def getPlayerState():
         return "standing"
 
 def getDealerCard():
-    return dealer.getHand()[0].show()
+    return dealer.getHand()[0]
 
 def getPlayerCards():
-    return player.showHand()
+    return player.hand
 
 def getPlayerPoints():
     return player.points
