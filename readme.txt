@@ -1,0 +1,1 @@
+Start server.py to begin playing Blackjack. You'll need Flask.
