@@ -129,11 +129,11 @@ def getGameState():
         return "Game is not over yet, still playing. You have " + str(getPlayerPoints()) + " points."
     else:
         if player.points > 21 and dealer.points > 21:
-            return "Nobody wins! Dealer's hand:", getDealerCards(), "dealer points", str(getDealerPoints()) + " Your points: " + str(getPlayerPoints())
+            return "Nobody wins! Dealer's hand: " + str(getDealerCards()) + " dealer points " + str(getDealerPoints()) + " Your points: " + str(getPlayerPoints())
         elif (player.points > dealer.points or dealer.points > 21) and player.points <= 21:
-            return "YOU WIN! Dealer's hand:", getDealerCards(), "dealer points", str(getDealerPoints()) + " Your points: " + str(getPlayerPoints())
+            return "YOU WIN! Dealer's hand: " + str(getDealerCards()) + " dealer points " + str(getDealerPoints()) + " Your points: " + str(getPlayerPoints())
         else:
-            return "YOU LOSE! Dealer's hand:", getDealerCards(), "dealer points", str(getDealerPoints()) + " Your points: " + str(getPlayerPoints())
+            return "YOU LOSE! Dealer's hand: " + str(getDealerCards()) + " dealer points " + str(getDealerPoints()) + " Your points: " + str(getPlayerPoints())
 
 def play(choice):
 
