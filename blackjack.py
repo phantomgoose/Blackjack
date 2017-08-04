@@ -57,6 +57,12 @@ gameOver = False
 functions for server comm
 '''
 
+def getPlayerState():
+    if playerStand == False:
+        return "playing"
+    else:
+        return "standing"
+
 def getDealerCard():
     return dealer.getHand()[0].show()
 
@@ -81,9 +87,11 @@ def setPlayerChoice(choice):
             playerStand = True
 
 def getGameState():
-    print gameOver
     if gameOver != True:
-        return "Game is not over yet, still playing. You have " + str(getPlayerPoints()) + " points."
+        if playerStand != True:
+            return "Game is not over yet, still playing. You have " + str(getPlayerPoints()) + " points."
+        else:
+            return "Game is not over yet. Dealer is still drawing. You have " + str(getPlayerPoints()) + " points."
     else:
         if player.points > 21 and dealer.points > 21:
             return "Nobody wins! Dealer's hand: " + str(getDealerCards()) + " dealer points " + str(getDealerPoints()) + " Your points: " + str(getPlayerPoints())
@@ -107,6 +115,10 @@ def play(choice):
         else:
             global playerStand
             playerStand = True
+
+    #in case player tries to cheat and hit after standing
+    if playerStand and choice=="hit":
+        play("hit")
 
     #dealer always draws until they have at least 17 points
     if dealer.points < 17:

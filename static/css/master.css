@@ -1,12 +1,15 @@
 .wrapper {
   width: 420px;
   background: lightgrey;
-  padding: 5px
+  padding: 5px;
+  border: thin solid black;
 }
 input {
-  border: thin solid black;
+  border: thick solid black;
   border-radius: 2px;
   color: white;
+  font-weight: bold;
+  font-size: 16px;
   background: orange;
   padding: 5px 20px;
   margin-right: 10px;
