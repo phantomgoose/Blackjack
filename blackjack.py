@@ -1,56 +1,54 @@
 from deck import Deck
 from player import Player
 
-#generate game objects
-d = Deck()
-player = Player("Hamilton")
-dealer = Player("Dealer")
+# generate game objects
+DECK = Deck()
+PLAYER = Player("Alex")
+DEALER = Player("Dealer")
 
-ace_value = 11
+# sets default Ace value (can be 1 or 11 in Blackjack)
+DEFAULT_ACE_VALUE = 11
 
-#have both player and dealer draw 2 cards
-player.draw(d).draw(d)
-dealer.draw(d).draw(d)
+# have both player and dealer draw 2 cards
+PLAYER.draw(DECK).draw(DECK)
+DEALER.draw(DECK).draw(DECK)
 
-#calculate player's points
+# calculate player's points
 def calcPoints(p):
-    #reset points to zero
+    # set initial points to zero
     pts = 0
-    p.points = 0
     for c in p.hand:
         if c.value < 10:
             pts += c.value
         elif c.value < 14:
             pts += 10
         elif c.value == 14:
-            pts += ace_value
-        else:
-            print "invalid card value"
-    #if you go over 21 and you have aces in your hand that haven't been ignored yet, ignore an ace and recalculate the points
+            pts += DEFAULT_ACE_VALUE
+    
+    # if the player goes over 21 and has aces in their hand, sets the value of aces to 1 (by subtracting 10 pts for each ace) until the player is under 21 points
     aces_in_hand = p.getNumOfCard(14)
     if pts > 21 and aces_in_hand > 0:
-        ignored_ace_count = 1
-        while pts > 21 and ignored_ace_count <= aces_in_hand:
+        ignored_ace_count = 0
+        while pts > 21 and ignored_ace_count < aces_in_hand:
             pts -= 10
             ignored_ace_count += 1
 
-    #finally update the player's points
-    p.points += pts
+    # finally update the player's points
+    p.points = pts
 
+# returns true if both dealer and player are at 21 or more points
 def isGameOver(p, d):
-    if (p.points >= 21 or d.points >= 21):
+    if (p.points >= 21 and d.points >= 21):
         return True
     return False
 
-#calculate starting points for both player and dealer
-calcPoints(player)
-calcPoints(dealer)
+# calculate starting points for both player and dealer
+calcPoints(PLAYER)
+calcPoints(DEALER)
 
-global playerStand
+# these global variables keep track of current game state and dealer's and player's decision to Stand and cease drawing cards
 playerStand = False
-global dealerStand
 dealerStand = False
-global gameOver
 gameOver = False
 
 '''
@@ -58,85 +56,56 @@ functions for server comm
 '''
 
 def getPlayerState():
-    if playerStand == False:
+    if not playerStand and not gameOver:
         return "playing"
     else:
         return "standing"
 
-def getDealerCard():
-    return dealer.getHand()[0]
-
 def getPlayerCards():
-    return player.hand
-
-def getPlayerPoints():
-    return player.points
+    return PLAYER.hand
 
 def getDealerCards():
-    return dealer.hand
+    return DEALER.hand
 
-def getDealerPoints():
-    return dealer.points
-
-def setPlayerChoice(choice):
-    if not playerStand:
-        if choice == "hit":
-            print "YOU DRAW A CARD"
-            player.draw(d)
-        else:
-            playerStand = True
-
+# returns a string that explains the current state of the game
 def getGameState():
-    if gameOver != True:
-        if playerStand != True:
-            return "Game is not over yet, still playing. You have " + str(getPlayerPoints()) + " points."
+    if not gameOver:
+        if not playerStand:
+            return "Still playing. Dealer points: " + str(DEALER.points) + ". Your points: " + str(PLAYER.points) + "."
         else:
-            return "Game is not over yet. Dealer is still drawing. You have " + str(getPlayerPoints()) + " points."
+            return "Dealer is still drawing. Dealer points: " + str(DEALER.points) + ". Your points: " + str(PLAYER.points) + ". Click 'continue' to move on."
     else:
-        if player.points > 21 and dealer.points > 21:
-            return "Nobody wins! Dealer points " + str(getDealerPoints()) + " Your points: " + str(getPlayerPoints())
-        elif (player.points > dealer.points or dealer.points > 21) and player.points <= 21:
-            return "YOU WIN! Dealer points " + str(getDealerPoints()) + " Your points: " + str(getPlayerPoints())
+        if PLAYER.points > 21 and DEALER.points > 21:
+            return "Nobody wins! Dealer points: " + str(DEALER.points) + ". Your points: " + str(PLAYER.points) + "."
+        elif (PLAYER.points > DEALER.points or DEALER.points > 21) and PLAYER.points <= 21:
+            return "YOU WIN! Dealer points: " + str(DEALER.points) + ". Your points: " + str(PLAYER.points) + "."
         else:
-            return "YOU LOSE! Dealer points " + str(getDealerPoints()) + " Your points: " + str(getPlayerPoints())
+            return "YOU LOSE! Dealer points: " + str(DEALER.points) + ". Your points: " + str(PLAYER.points) + "."
 
+# main game method. Takes a string as a parameter, which determines player's action
 def play(choice):
+    global playerStand
+    global dealerStand
+    global gameOver
 
-    #print game state information
-    print "Dealer's first card: " + dealer.getHand()[0].show()
-    print "YOU HAVE " + str(player.points).upper() + " POINTS. Your hand consists of: ", player.showHand()
-
-    #player goes first
-    #first we get their choice
+    # player goes first
+    # ensure player didn't choose to stand before
     if not playerStand:
-        if choice == "hit":
-            print "YOU DRAW A CARD"
-            player.draw(d)
+        if choice == "hit" and PLAYER.points < 21:
+            PLAYER.draw(DECK)
         else:
-            global playerStand
             playerStand = True
 
-    #in case player tries to cheat and hit after standing
-    if playerStand and choice=="hit":
-        play("hit")
-
-    #dealer always draws until they have at least 17 points
-    if dealer.points < 17:
-        print "DEALER DRAWS A CARD"
-        dealer.draw(d)
+    # dealer draws until they have at least 17 points, but will draw past that if the player chose to stand and has more points
+    if not gameOver and (DEALER.points < 17 or (playerStand and DEALER.points < 21 and DEALER.points < PLAYER.points)):
+        DEALER.draw(DECK)
     else:
-        print "DEALER DOESN'T DRAW ANYMORE"
-        global dealerStand
         dealerStand = True
 
-    #recalculate points for both dealer and player every loop
-    calcPoints(player)
-    calcPoints(dealer)
+    # recalculate points for both dealer and player every time this method runs
+    calcPoints(PLAYER)
+    calcPoints(DEALER)
 
-    #end the game if neither the player nor the dealer are willing to draw cards
-    if (dealerStand and playerStand) or isGameOver(player, dealer):
-        global gameOver
+    # end the game if neither the player nor the dealer are willing to draw cards OR if both parties have 21 or more points
+    if (dealerStand and playerStand) or isGameOver(PLAYER, DEALER):
         gameOver = True
-        print "Game over"
-        print getDealerCards()
-        print getDealerPoints()

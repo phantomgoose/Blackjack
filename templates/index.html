@@ -6,16 +6,20 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='css/master.css') }}">
 </head>
 <body>
+  <header>
+    <p>Welcome to the Blackjack minigame!</p>
+    <p>Dealer will draw if he has less than 17 points. Game ends if both dealer and player choose to stand or one or both participants are at or over 21 points.</p>
+  </header>
   <div class="wrapper">
     <h1>Dealer cards:</h1>
     {{ dealer_cards | safe }}
     <h1>Your cards:</h1>
     {{ player_cards | safe }}
-    <p>{{ output }}</p>
+    <p>Game status: {{ output }}</p>
     <form class="player_decision" action="/decide" method="post">
       <input type="submit" name="choice" value="hit" {{ hit_stand_state }}>
       <input type="submit" name="choice" value="stand" {{ hit_stand_state }}>
-      <input type="submit" name="choice" value="skip" {{ skip_state }}>
+      <input type="submit" name="choice" value="continue" {{ continue_btn_state }}>
       <input type="submit" name="choice" value="reset">
     </form>
   </div>

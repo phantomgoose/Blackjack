@@ -1,13 +1,13 @@
 class Card(object):
-    def __init__(self,suit,value):
+    def __init__(self, suit, value):
         self.suit = suit
         self.value = value
 
-    #prints the card value to console
+    # returns a string representation of the card
     def show(self):
         return '{} of {}'.format(self.valToName(self.value), self.suit)
 
-    #converts card's value (1-14) to its name (2 -> Ace)
+    # returns the card's name as a string based on its value
     def valToName(self, val):
         conversionDict = {
             2: "Two",
@@ -26,6 +26,7 @@ class Card(object):
         }
         return conversionDict[val]
 
+    # returns the card's value as a shortened string
     def getShortValue(self):
         conversionDict = {
             2: "2",
@@ -44,6 +45,7 @@ class Card(object):
         }
         return conversionDict[self.value]
 
+    # returns the card's suit as a shortened string
     def getShortSuit(self):
         conversionDict = {
             "Hearts": "H",
@@ -53,7 +55,7 @@ class Card(object):
         }
         return conversionDict[self.suit]
 
-#test cases
+# test cases
 if __name__ == "__main__":
     c = Card("Clubs", 11)
     b = Card("Diamonds", 10)

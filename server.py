@@ -7,16 +7,18 @@ app = Flask(__name__)
 
 def root():
     if blackjack.getPlayerState() == "playing":
-        skip_state = "hidden"
+        continue_btn_state = "hidden"
         hit_stand_state = ""
     else:
-        skip_state = ""
+        continue_btn_state = ""
         hit_stand_state = "hidden"
-    return render_template("index.html", dealer_cards=cardsToImg(blackjack.getDealerCards()), player_cards=cardsToImg(blackjack.getPlayerCards()), output=blackjack.getGameState(), skip_state=skip_state, hit_stand_state=hit_stand_state)
+    return render_template("index.html", dealer_cards=cardsToImg(blackjack.getDealerCards()), player_cards=cardsToImg(blackjack.getPlayerCards()), output=blackjack.getGameState(), continue_btn_state=continue_btn_state, hit_stand_state=hit_stand_state)
 
+# helper method for mapping the card object to the corresponding image
 def cardToImg(card):
     return "<img src='static/svg/" + card.getShortValue() + card.getShortSuit() + ".svg'>"
 
+# helper method that takes an array of cards and converts it to html markup that consists of corresponding card images
 def cardsToImg(cards):
     res = ""
     for card in cards:
@@ -26,15 +28,12 @@ def cardsToImg(cards):
 @app.route("/decide", methods=["POST"])
 
 def decide():
-    option = request.form["choice"]
-    if option == "reset":
+    choice = request.form["choice"]
+    if choice == "reset":
+        # game is meant to support only a single client, so resetting just reloads the blackjack module
         reload(blackjack)
-        return redirect("/")
-    elif option == "skip":
-        blackjack.play("stand")
-        return redirect("/")
     else:
-        blackjack.play(option)
-        return redirect("/")
+        blackjack.play(choice)
+    return redirect("/")
 
-app.run(debug=True)
+app.run()
